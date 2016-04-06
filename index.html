@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+	<canvas id="canvas"></canvas>
+
+<script type="text/javascript">
+
+//Get the canvas with JavaScript		
+var canvas = document.getElementById('canvas');
+//Create a context var so we can target it
+var context = canvas.getContext('2d');
+//Set hard width and height
+canvas.width = 512;
+canvas.height = 480;
+//PUT the canvas in the DOM
+// document.body.appendChild(canvas);
+
+//Put a backgroudn image on the canvas
+var bgImage = new Image();
+bgImage.src = "background.png";
+
+//Make our hero
+var josh = new Image();
+josh.src = "hero.png";
+var joshLoc = {
+	x: 100,
+	y: 100
+}
+
+//make our monster
+var will = new Image();
+will.src = "monster.png";
+var willLoc = {
+	x: 150,
+	y: 100
+}
+
+//Handler for our keypresses
+var keysDown = [];
+//we will put in this object, the keys that are pressed.
+
+addEventListener('keydown', function(event){
+	keysDown[event.keyCode] = true;
+	// console.log(keysDown);
+});
+
+addEventListener('keyup', function(event){
+	delete keysDown[event.keyCode];
+});
+
+var update = function(){
+	if(38 in keysDown){
+		//If 38 is in keysDown, that means the user has pressed up.
+		//Move Josh up.
+		console.log(joshLoc.y);
+		if(joshLoc.y > 40){
+			joshLoc.y -= 10;
+		}else{
+			//Josh has run into the bushes. Go with natures call.
+		}
+	}
+	if(40 in keysDown){
+		//If 40 is pressed, teh user pushed down.
+		if(joshLoc.y < 420){
+			joshLoc.y += 10;
+		}else{
+			//Josh has run into the bushes. Go with natures call.
+		}
+	}
+
+	if(37 in keysDown){
+		//This menas the user pushed the left arrow
+		joshLoc.x -= 10;
+	}
+
+	if(39 in keysDown){
+		//This menas the user pushed the right arrow
+		joshLoc.x += 10;
+	}
+
+	//Check to see if Josh has caught the craft will.
+	//Basic collision detection
+	if(
+		joshLoc.x <= (willLoc.x + 32)
+		&& willLoc.x <= (joshLoc.x + 32)
+		&& joshLoc.y <= (willLoc.y + 32)
+		&& willLoc.y <= (joshLoc.y + 32)
+	){
+			console.log('Josh is standing on top of Will');
+	}
+	
+
+}
+
+
+function draw(){
+	//THIS IS WHERE WE DRAW OUR STUFF!!!
+	context.drawImage(bgImage, 0, 0);
+	context.drawImage(josh, joshLoc.x, joshLoc.y);
+	context.drawImage(will, 150, 100);
+	update();
+	requestAnimationFrame(draw);	
+}
+
+draw();
+
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+
